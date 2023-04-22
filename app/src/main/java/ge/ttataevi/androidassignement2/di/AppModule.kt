@@ -6,6 +6,9 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import ge.ttataevi.androidassignement2.data.repository.WeatherAppRepoImpl
+import ge.ttataevi.androidassignement2.data.source.WeatherSource
+import ge.ttataevi.androidassignement2.domain.repository.WeatherAppRepo
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -43,4 +46,13 @@ object AppModule {
             .build()
     }
 
+    @Provides
+    @Singleton
+    fun provideHomeApi(retrofit: Retrofit): WeatherSource =
+        retrofit.create(WeatherSource::class.java)
+
+    @Provides
+    @Singleton
+    fun provideWeatherRepo(weatherSource: WeatherSource): WeatherAppRepo =
+        WeatherAppRepoImpl(weatherSource)
 }
